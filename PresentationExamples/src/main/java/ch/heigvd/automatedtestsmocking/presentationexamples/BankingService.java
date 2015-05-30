@@ -14,7 +14,7 @@ public class BankingService {
 	//@EJB
 	private TimeService timeService;
 
-	public double getMonthBalance(Customer customer) {
+	public double getLastMonthBalance(Customer customer) {
 
 		// get last month date
 		Calendar cal = Calendar.getInstance();

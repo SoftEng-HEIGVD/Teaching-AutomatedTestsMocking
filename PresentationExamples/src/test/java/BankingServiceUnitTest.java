@@ -53,7 +53,7 @@ public class BankingServiceUnitTest {
 
 		when(accountManager.findOperationsSince(any(Customer.class), any(Date.class))).thenReturn(operations);
 
-		double balance = bankingService.getMonthBalance(customer);
+		double balance = bankingService.getLastMonthBalance(customer);
 
 		// check that the account manager was called with the correct arguments
 		verify(accountManager).findOperationsSince(customer, getDate("1999-12-01"));
@@ -78,7 +78,7 @@ public class BankingServiceUnitTest {
 
 		when(accountManager.findOperationsSince(any(Customer.class), any(Date.class))).thenReturn(operations);
 
-		double balance = bankingService.getMonthBalance(customer);
+		double balance = bankingService.getLastMonthBalance(customer);
 
 		// check that the account manager was called with the correct arguments
 		verify(accountManager).findOperationsSince(customer, getDate("2000-12-01"));
@@ -95,11 +95,10 @@ public class BankingServiceUnitTest {
 		Customer customer = new Customer("Peter Gibbons");
 
 		// no operations last month
-		List<Operation> operations = new ArrayList<>();
+		List<Operation> noOperations = new ArrayList<>();
+		when(accountManager.findOperationsSince(any(Customer.class), any(Date.class))).thenReturn(noOperations);
 
-		when(accountManager.findOperationsSince(any(Customer.class), any(Date.class))).thenReturn(operations);
-
-		double balance = bankingService.getMonthBalance(customer);
+		double balance = bankingService.getLastMonthBalance(customer);
 
 		// check that the account manager was called with the correct arguments
 		verify(accountManager).findOperationsSince(customer, getDate("2010-04-05"));
@@ -124,7 +123,7 @@ public class BankingServiceUnitTest {
 
 		when(accountManager.findOperationsSince(any(Customer.class), any(Date.class))).thenReturn(operations);
 
-		double balance = bankingService.getMonthBalance(customer);
+		double balance = bankingService.getLastMonthBalance(customer);
 
 		// check that the account manager was called with the correct arguments
 		verify(accountManager).findOperationsSince(customer, getDate("1999-12-01"));
@@ -144,7 +143,7 @@ public class BankingServiceUnitTest {
 		when(accountManager.findOperationsSince(any(Customer.class), any(Date.class))).thenThrow(databaseException);
 
 		try {
-			bankingService.getMonthBalance(customer);
+			bankingService.getLastMonthBalance(customer);
 			fail("Expected CustomerAccountException to be thrown");
 		} catch (CustomerAccountException e) {
 			assertEquals("Could not compute balance", e.getMessage());
